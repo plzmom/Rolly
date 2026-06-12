@@ -6,10 +6,10 @@ int main()
     Init();
 
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,
-         0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f,
+         0.5f, -0.5f, 0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f, 0.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f,   0.0f, 1.0f
     };
 
     unsigned int indices[] = {
@@ -40,11 +40,15 @@ int main()
     );
 
     CreateStandartShader();
+    CreateTextureFromFile("src/assets/sim.png");
+    SetColors(0.0f, 0.0f, 1.0f, 1.0f);
+    SetTextureEnabled(1);
+    SetAlphaThreshold(0.1f);
+    SetAlphaCutoffEnabled(1);
 
     loop(win)
     {
         ColorBG(1.0, 0.0, 0.0, 1.0);
-        SetColors(1.0f, 1.0f, 0.0f, 1.0f);
         Draw();
     }
 
