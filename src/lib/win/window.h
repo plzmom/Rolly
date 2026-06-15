@@ -3,7 +3,6 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stdio.h>
 
 typedef GLFWwindow Window;
 
@@ -19,8 +18,6 @@ void MakeContext(Window *window);
 void Destroy(Window *window);
 
 void Terminate(void);
-
-void Init(void);
 
 int errorGLAD(Window *window);
 

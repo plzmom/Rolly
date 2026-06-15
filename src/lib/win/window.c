@@ -2,13 +2,6 @@
 #include <glad/glad.h>
 #include "window.h"
 
-typedef GLFWwindow Window;
-
-#define loop(window)                                              \
-    while (!glfwWindowShouldClose(window))                        \
-        for (int _once = 1; _once;                                \
-             glfwSwapBuffers(window), glfwPollEvents(), _once = 0)
-
 Window *create_window(int w, int h, const char *t)
 {
     if (!glfwInit())
@@ -34,11 +27,6 @@ void Destroy(Window *window)
 void Terminate(void)
 {
     glfwTerminate();
-}
-
-void Init()
-{
-    glfwInit();
 }
 
 static void framebuffer_size_callback(GLFWwindow *window, int width, int height)

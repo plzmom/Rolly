@@ -6,23 +6,57 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "render.h"
 
-typedef struct {
-    unsigned int vao;
-    unsigned int vbo;
-    unsigned int ebo;
-    unsigned int texture;
-    int useTexture;
-    float color[4];
-    int indexCount;
-    float x, y;
-    float alphaCutoff;
-} Object;
+
 
 static Object *objects = NULL;
 static size_t objectsCount = 0;
 
 static unsigned int shader;
+
+static int object_collision(unsigned int a, unsigned int b)
+{
+    if (a >= objectsCount || b >= objectsCount)
+        return 0;
+
+    const Object *o1 = &objects[a];
+    const Object *o2 = &objects[b];
+
+    if (!o1->hasCollider || !o2->hasCollider)
+        return 0;
+
+    float o1x = o1->x + o1->colliderOx;
+    float o1y = o1->y + o1->colliderOy;
+    float o2x = o2->x + o2->colliderOx;
+    float o2y = o2->y + o2->colliderOy;
+
+    return o1x - o1->colliderW * 0.5f < o2x + o2->colliderW * 0.5f &&
+           o1x + o1->colliderW * 0.5f > o2x - o2->colliderW * 0.5f &&
+           o1y - o1->colliderH * 0.5f < o2y + o2->colliderH * 0.5f &&
+           o1y + o1->colliderH * 0.5f > o2y - o2->colliderH * 0.5f;
+}
+
+
+void update_body(unsigned int id, float g)
+{
+    if (id >= objectsCount) return;
+    Object *b = &objects[id];
+
+    static double last_time = 0.0;
+    double now = glfwGetTime();
+    double dt = 1.0/60.0;
+    if (last_time > 0.0)
+        dt = now - last_time;
+    last_time = now;
+
+    b->vy += g * (float)dt;
+
+    float dx = b->vx * (float)dt;
+    float dy = b->vy * (float)dt;
+ 
+    MoveObject(id, dx, dy);
+}
 
 static const char *vs =
 "#version 330 core\n"
@@ -52,6 +86,7 @@ static const char *fs =
 "        FragColor = color;\n"
 "    }\n"
 "}\n";
+
 
 static unsigned int compile(unsigned int t, const char *s) {
     unsigned int sh = glCreateShader(t);
@@ -137,6 +172,30 @@ unsigned int CreateObject(float *vertices,
     o.y = 0;
     o.alphaCutoff = 0.0f;
 
+    if (vertices && verticesSize >= 5 * sizeof(float)) {
+        size_t count = verticesSize / (5 * sizeof(float));
+        float minX = vertices[0];
+        float maxX = vertices[0];
+        float minY = vertices[1];
+        float maxY = vertices[1];
+
+        for (size_t i = 1; i < count; i++) {
+            float x = vertices[i * 5 + 0];
+            float y = vertices[i * 5 + 1];
+
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+        }
+
+        o.colliderW = maxX - minX;
+        o.colliderH = maxY - minY;
+        o.colliderOx = (minX + maxX) * 0.5f;
+        o.colliderOy = (minY + maxY) * 0.5f;
+        o.hasCollider = 1;
+    }
+
     Object *tmp = realloc(objects,(objectsCount+1)*sizeof(Object));
     if (!tmp) return -1;
 
@@ -154,9 +213,17 @@ void SetObjectPosition(unsigned int id, float x, float y) {
 
 void DrawAll(void) {
     glUseProgram(shader);
+    int dbg = getenv("DEBUG_OBJECTS") != NULL;
+    if (dbg) fprintf(stderr, "DrawAll: objectsCount=%zu\n", objectsCount);
 
     for (size_t i = 0; i < objectsCount; i++) {
         Object *o = &objects[i];
+        if (dbg) {
+            fprintf(stderr, "Obj %zu: x=%f y=%f vx=%f vy=%f color=%f,%f,%f,%f useTex=%d hasCollider=%d\n",
+                    i, o->x, o->y, o->vx, o->vy,
+                    o->color[0], o->color[1], o->color[2], o->color[3],
+                    o->useTexture, o->hasCollider);
+        }
 
         glUniform4f(glGetUniformLocation(shader,"color"),
                     o->color[0],o->color[1],o->color[2],o->color[3]);
@@ -174,6 +241,64 @@ void DrawAll(void) {
         glBindVertexArray(o->vao);
         glDrawElements(GL_TRIANGLES,o->indexCount,GL_UNSIGNED_INT,0);
     }
+}
+
+int CheckObjectCollision(unsigned int a, unsigned int b) {
+    return object_collision(a, b);
+}
+
+void SetObjectCollisionEnabled(unsigned int id, int enable) {
+    if (id >= objectsCount)
+        return;
+
+    objects[id].hasCollider = enable ? (objects[id].colliderW > 0.0f && objects[id].colliderH > 0.0f) : 0;
+}
+
+int MoveObject(unsigned int id, float dx, float dy) {
+    if (id >= objectsCount)
+        return 0;
+
+    if (!objects[id].hasCollider) {
+        objects[id].x += dx;
+        objects[id].y += dy;
+        return 1;
+    }
+
+    float oldX = objects[id].x;
+    float oldY = objects[id].y;
+    int moved = 0;
+
+    if (dx != 0.0f) {
+        objects[id].x += dx;
+        for (size_t i = 0; i < objectsCount; i++) {
+            if (i == id || !objects[i].hasCollider)
+                continue;
+
+            if (object_collision(id, i)) {
+                objects[id].x = oldX;
+                break;
+            }
+        }
+        if (objects[id].x != oldX)
+            moved = 1;
+    }
+
+    if (dy != 0.0f) {
+        objects[id].y += dy;
+        for (size_t i = 0; i < objectsCount; i++) {
+            if (i == id || !objects[i].hasCollider)
+                continue;
+
+            if (object_collision(id, i)) {
+                objects[id].y = oldY;
+                break;
+            }
+        }
+        if (objects[id].y != oldY)
+            moved = 1;
+    }
+
+    return moved;
 }
 
 void SetObjectAlphaCutoff(unsigned int id, float cutoff) {

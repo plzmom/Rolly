@@ -2,12 +2,10 @@
 
 #include "lib/win/window.h"
 #include "lib/render/render.h"
-#include "lib/physics/collision.h"
+
 
 int main(void)
 {
-    Init();
-
     Window *win = create_window(1920, 1080, "Title");
 
     if (!win)
@@ -32,17 +30,34 @@ int main(void)
         2, 3, 0
     };
 
+// Тепер кожна вершина має 5 значень: X, Y, Z, U, V
+    float floorVertices[] = {
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,  // Нижня ліва
+         1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  // Нижня права
+         1.0f, -0.8f, 0.0f, 1.0f, 1.0f,  // Верхня права
+        -1.0f, -0.8f, 0.0f, 0.0f, 1.0f   // Верхня ліва
+    };
+
+    unsigned int floorIndices[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+
     unsigned int obj1 =
         CreateObject(vertices, sizeof(vertices),
                      indices, sizeof(indices),
                      NULL,
-                     1.0f, 1.0f, 1.0f, 1.0f);
+                     1.0f, 1.0f, 0.0f, 1.0f);
 
     unsigned int obj2 =
         CreateObject(vertices, sizeof(vertices),
                      indices, sizeof(indices),
                      NULL,
-                     1.0f, 1.0f, 1.0f, 1.0f);
+                     0.0f, 0.0f, 1.0f, 1.0f);
+    unsigned int floor = CreateObject(floorVertices, sizeof(floorVertices),
+                                        floorIndices, sizeof(floorIndices),
+                                    NULL, 0.0f, 1.0f, 0.0f, 1.0f);
 
     if (obj1 == (unsigned int)-1 || obj2 == (unsigned int)-1) {
         fprintf(stderr, "Failed to create object(s). Check texture paths.\n");
@@ -51,50 +66,43 @@ int main(void)
         return -1;
     }
 
+
+    SetObjectCollisionEnabled(obj2, 1);
+    SetObjectCollisionEnabled(obj1, 1);
+    SetObjectCollisionEnabled(floor, 1);
+
     SetObjectPosition(obj1, 0.0f, 0.0f);
     SetObjectPosition(obj2, 0.8f, 0.0f);
 
     SetObjectRemoveBackground(obj1, 1);
     SetObjectRemoveBackground(obj2, 1);
 
-    float playerX = 0.0f;
-    float playerY = 0.0f;
-
     int wasHit = 0;
 
     loop(win)
     {
+        float dx = 0.0f;
+        float dy = 0.0f;
+
         if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
-            playerX -= 0.01f;
+            dx -= 0.01f;
 
         if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
-            playerX += 0.01f;
+            dx += 0.01f;
 
         if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
-            playerY += 0.01f;
+            dy += 0.01f;
 
         if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
-            playerY -= 0.01f;
+            dy -= 0.01f;
 
-        SetObjectPosition(obj1, playerX, playerY);
-
-        Collider player = {
-            playerX - 0.12f,
-            playerY - 0.12f,
-            0.24f,
-            0.24f
-        };
-
-        Collider enemy = {
-            0.8f,
-            0.0f,
-            0.24f,
-            0.24f
-        };
+        update_body(obj1, -0.5);
+        
+        MoveObject(obj1, dx, dy);
 
         ColorBG(0.0f, 0.0f, 0.0f, 1.0f);
 
-        if (CheckCollision(player, enemy)) {
+        if (CheckObjectCollision(obj1, obj2)) {
             if (!wasHit) {
                 printf("Hit\n");
                 wasHit = 1;
