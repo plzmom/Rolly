@@ -38,23 +38,20 @@ static int object_collision(unsigned int a, unsigned int b)
 }
 
 
+float g_frame_dt = 1.0f/60.0f;
+
 void update_body(unsigned int id, float g)
 {
     if (id >= objectsCount) return;
     Object *b = &objects[id];
 
-    static double last_time = 0.0;
-    double now = glfwGetTime();
-    double dt = 1.0/60.0;
-    if (last_time > 0.0)
-        dt = now - last_time;
-    last_time = now;
+    float dt = g_frame_dt;
 
-    b->vy += g * (float)dt;
+    b->vy += g * dt;
 
-    float dx = b->vx * (float)dt;
-    float dy = b->vy * (float)dt;
- 
+    float dx = b->vx * dt;
+    float dy = b->vy * dt;
+
     MoveObject(id, dx, dy);
 }
 
@@ -267,6 +264,7 @@ int MoveObject(unsigned int id, float dx, float dy) {
     float oldX = objects[id].x;
     float oldY = objects[id].y;
     int moved = 0;
+    int collision_blocked = 0;
 
     if (dx != 0.0f) {
         objects[id].x += dx;
@@ -276,6 +274,7 @@ int MoveObject(unsigned int id, float dx, float dy) {
 
             if (object_collision(id, i)) {
                 objects[id].x = oldX;
+                collision_blocked = 1;
                 break;
             }
         }
@@ -291,12 +290,16 @@ int MoveObject(unsigned int id, float dx, float dy) {
 
             if (object_collision(id, i)) {
                 objects[id].y = oldY;
+                collision_blocked = 1;
                 break;
             }
         }
         if (objects[id].y != oldY)
             moved = 1;
     }
+
+    if (collision_blocked && !moved)
+        return 2; /* movement blocked by collision */
 
     return moved;
 }

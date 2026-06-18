@@ -30,6 +30,8 @@ void ColorBG(float r, float g, float b, float a);
 
 unsigned int CreateStandartShader(void);
 
+extern float g_frame_dt;
+
 void update_body(unsigned int id, float g);
 
 unsigned int CreateObject(float *vertices,
