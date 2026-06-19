@@ -61,6 +61,22 @@ void update_body(unsigned int id, float g)
     MoveObject(id, dx, dy);
 }
 
+void DeleteObject(unsigned int id)
+{
+    if (id >= objectsCount) return;
+
+    glDeleteVertexArrays(1,&objects[id].vao);
+    glDeleteBuffers(1,&objects[id].vbo);
+    glDeleteBuffers(1,&objects[id].ebo);
+    if (objects[id].useTexture)
+        glDeleteTextures(1,&objects[id].texture);
+
+    for (size_t i = id; i < objectsCount - 1; i++) {
+        objects[i] = objects[i + 1];
+    }
+    objectsCount--;
+}
+
 static const char *vs =
 "#version 330 core\n"
 "layout(location=0) in vec3 aPos;\n"

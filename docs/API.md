@@ -27,6 +27,9 @@
 - `unsigned int CreateStandartShader(void)`:
   - Опис: створює простий шейдер (вершинний + фрагментний) для рендерингу текстур або кольору. Повертає `GLuint` програми шейдера.
 
+- `void DeleteObject(unsigned int id)`:
+  - Опис: Видаляє об'єкт со сцени.
+
 - `unsigned int CreateObject(float *vertices, size_t verticesSize, unsigned int *indices, size_t indicesSize, const char *texturePath, float r, float g, float b, float a)`:
   - Опис: створює об'єкт для рендерингу.
   - `vertices` очікує масив з кроком 5 (X, Y, Z, U, V) — позиція та UV координати.
@@ -72,6 +75,7 @@
 - `void UI_Text(const char *fmt, ...)`, `int UI_Button(const char *text)` — допоміжні виклики для тексту і кнопок.
 - `int UI_BeginWindow(const char *name)`, `void UI_EndWindow(void)` — початок/кінець вікна ImGui.
 - `int UI_DrawOverlay(int wasHit)` — простий оверлей, що показує `wasHit` і кнопку "Reset object 1"; повертає 1 якщо натискали.
+- `int UI_TextButton(const char *text)` - проста кнопка без фона тільки текст
 
 **Поради по використанню**
 

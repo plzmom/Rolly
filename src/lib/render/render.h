@@ -39,6 +39,8 @@ extern float g_frame_dt;
 
 void update_body(unsigned int id, float g);
 
+void DeleteObject(unsigned int id);
+
 unsigned int CreateObject(float *vertices,
                           size_t verticesSize,
                           unsigned int *indices,

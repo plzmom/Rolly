@@ -77,3 +77,16 @@ int UI_DrawOverlay(int wasHit)
     ImGui::End();
     return pressed;
 }
+
+int UI_TextButton(const char *text)
+{
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0,0,0,0));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0,0,0,0));
+
+    int pressed = ImGui::Button(text);
+
+    ImGui::PopStyleColor(3);
+
+    return pressed;
+}

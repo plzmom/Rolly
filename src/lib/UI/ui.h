@@ -16,8 +16,8 @@ void UI_Text(const char *fmt, ...);
 int UI_Button(const char *text);
 int UI_BeginWindow(const char *name);
 void UI_EndWindow(void);
-// Draw a minimal overlay HUD. Returns non-zero if the "Reset object 1" button was pressed.
 int UI_DrawOverlay(int wasHit);
+int UI_TextButton(const char *text);
 
 #ifdef __cplusplus
 }
