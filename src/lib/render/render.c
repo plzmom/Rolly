@@ -14,6 +14,7 @@ static Object *objects = NULL;
 static size_t objectsCount = 0;
 
 static unsigned int shader;
+static float g_collider_margin = 0.02f;
 
 static int object_collision(unsigned int a, unsigned int b)
 {
@@ -26,15 +27,20 @@ static int object_collision(unsigned int a, unsigned int b)
     if (!o1->hasCollider || !o2->hasCollider)
         return 0;
 
-    float o1x = o1->x + o1->colliderOx;
-    float o1y = o1->y + o1->colliderOy;
-    float o2x = o2->x + o2->colliderOx;
-    float o2y = o2->y + o2->colliderOy;
+        float o1x = o1->x + o1->colliderOx;
+        float o1y = o1->y + o1->colliderOy;
+        float o2x = o2->x + o2->colliderOx;
+        float o2y = o2->y + o2->colliderOy;
 
-    return o1x - o1->colliderW * 0.5f < o2x + o2->colliderW * 0.5f &&
-           o1x + o1->colliderW * 0.5f > o2x - o2->colliderW * 0.5f &&
-           o1y - o1->colliderH * 0.5f < o2y + o2->colliderH * 0.5f &&
-           o1y + o1->colliderH * 0.5f > o2y - o2->colliderH * 0.5f;
+        float half1w = o1->colliderW * 0.5f + g_collider_margin;
+        float half1h = o1->colliderH * 0.5f + g_collider_margin;
+        float half2w = o2->colliderW * 0.5f + g_collider_margin;
+        float half2h = o2->colliderH * 0.5f + g_collider_margin;
+
+        return o1x - half1w < o2x + half2w &&
+            o1x + half1w > o2x - half2w &&
+            o1y - half1h < o2y + half2h &&
+            o1y + half1h > o2y - half2h;
 }
 
 
@@ -244,11 +250,66 @@ int CheckObjectCollision(unsigned int a, unsigned int b) {
     return object_collision(a, b);
 }
 
-void SetObjectCollisionEnabled(unsigned int id, int enable) {
+void SetObjectCollisionEnabled(unsigned int id, int enable, float colliderW, float colliderH, float colliderOx, float colliderOy) {
     if (id >= objectsCount)
         return;
 
     objects[id].hasCollider = enable ? (objects[id].colliderW > 0.0f && objects[id].colliderH > 0.0f) : 0;
+    if (enable) {
+        objects[id].colliderW = colliderW;
+        objects[id].colliderH = colliderH;
+        objects[id].colliderOx = colliderOx;
+        objects[id].colliderOy = colliderOy;
+    } else {
+        objects[id].colliderW = 0.0f;
+        objects[id].colliderH = 0.0f;
+        objects[id].colliderOx = 0.0f;
+        objects[id].colliderOy = 0.0f;
+    }
+}
+
+void SetObjectTriggerEnabled(unsigned int id, int enable, float triggerW, float triggerH, float triggerOx, float triggerOy) {
+    if (id >= objectsCount)
+        return;
+
+    objects[id].hasTrigger = enable ? 1 : 0;
+    if (enable) {
+        objects[id].triggerW = triggerW;
+        objects[id].triggerH = triggerH;
+        objects[id].triggerOx = triggerOx;
+        objects[id].triggerOy = triggerOy;
+    } else {
+        objects[id].triggerW = 0.0f;
+        objects[id].triggerH = 0.0f;
+        objects[id].triggerOx = 0.0f;
+        objects[id].triggerOy = 0.0f;
+    }
+}
+
+int CheckObjectTrigger(unsigned int triggerId, unsigned int objectId) {
+    if (triggerId >= objectsCount || objectId >= objectsCount)
+        return 0;
+
+    const Object *t = &objects[triggerId];
+    const Object *o = &objects[objectId];
+
+    if (!t->hasTrigger)
+        return 0;
+
+    float tx = t->x + t->triggerOx;
+    float ty = t->y + t->triggerOy;
+    float halfTw = t->triggerW * 0.5f;
+    float halfTh = t->triggerH * 0.5f;
+
+    float ox = o->x + o->colliderOx;
+    float oy = o->y + o->colliderOy;
+    float halfOw = (o->hasCollider ? o->colliderW * 0.5f : 0.0f);
+    float halfOh = (o->hasCollider ? o->colliderH * 0.5f : 0.0f);
+
+    return tx - halfTw < ox + halfOw &&
+           tx + halfTw > ox - halfOw &&
+           ty - halfTh < oy + halfOh &&
+           ty + halfTh > oy - halfOh;
 }
 
 int MoveObject(unsigned int id, float dx, float dy) {
@@ -312,6 +373,11 @@ void SetObjectAlphaCutoff(unsigned int id, float cutoff) {
 void SetObjectRemoveBackground(unsigned int id, int enable) {
     if (id >= objectsCount) return;
     objects[id].alphaCutoff = enable ? 0.1f : 0.0f;
+}
+
+void SetCollisionMargin(float margin) {
+    if (margin < 0.0f) margin = 0.0f;
+    g_collider_margin = margin;
 }
 
 void ColorBG(float r,float g,float b,float a) {

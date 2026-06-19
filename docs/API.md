@@ -41,13 +41,19 @@
   - `1` — переміщення виконано,
   - `2` — рух заблоковано колізією.
 
-- `void SetObjectCollisionEnabled(unsigned int id, int enable)` — вмикає/вимикає перевірку зіткнень для об'єкта.
+ - `void SetObjectCollisionEnabled(unsigned int id, int enable, float colliderW, float colliderH, float colliderOx, float colliderOy)` — вмикає/вимикає перевірку зіткнень для об'єкта. Якщо `enable` = 1, додаткові параметри задають розміри та офсет колайдера (ширина, висота, офсет X, офсет Y). Якщо `enable` = 0, колайдер скидається і об'єкт не блокується.
 
-- `int CheckObjectCollision(unsigned int a, unsigned int b)` — перевіряє колізію між двома об'єктами, повертає ненульове значення при зіткненні.
+ - `void SetCollisionMargin(float margin)` — задає невеликий додатковий відступ, який додається до пів-вимірів колайдерів під час перевірки зіткнень. Це дозволяє уникнути ситуацій, коли об'єкти опиняються точно "в притик". Передавай `0.0f` щоб відключити; за замовчуванням margin = 0.02f.
+
+ - `int CheckObjectCollision(unsigned int a, unsigned int b)` — перевіряє колізію між двома об'єктами, повертає ненульове значення при зіткненні.
 
 - `void SetObjectAlphaCutoff(unsigned int id, float cutoff)` — встановлює поріг прозорості; пікселі з альфою нижче `cutoff` відкидаються (discard) у фрагментному шейдері.
 
 - `void SetObjectRemoveBackground(unsigned int id, int enable)` — зручно вмикає `alphaCutoff` на значення `0.1f` якщо включено або `0.0f` якщо виключено.
+
+ - `void SetObjectTriggerEnabled(unsigned int objectId, int enable, float triggerW, float triggerH, float triggerOx, float triggerOy)` — налаштовує тригер-зону для об'єкта. Тригер не блокує рух; використовується для сповіщень при входженні/виході інших об'єктів.
+
+ - `int CheckObjectTrigger(unsigned int triggerId, unsigned int objectId)` — перевіряє, чи перетинає `objectId` тригер-зону `triggerId`; повертає ненульове значення при перекритті.
 
 - `void ColorBG(float r, float g, float b, float a)` — встановлює колір фону і очищає буфер кольору.
 

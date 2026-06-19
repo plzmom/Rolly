@@ -23,6 +23,11 @@ typedef struct {
     float colliderH;
     float colliderOx;
     float colliderOy;
+    int hasTrigger;
+    float triggerW;
+    float triggerH;
+    float triggerOx;
+    float triggerOy;
     float vx, vy;
 } Object;
 
@@ -45,10 +50,22 @@ void SetObjectPosition(unsigned int objectId, float x, float y);
 int CheckObjectCollision(unsigned int objectA, unsigned int objectB);
 int MoveObject(unsigned int objectId, float dx, float dy);
 
-void SetObjectCollisionEnabled(unsigned int objectId, int enable);
+void SetObjectCollisionEnabled(unsigned int objectId, int enable, float colliderW, float colliderH, float colliderOx, float colliderOy);
 
 void SetObjectAlphaCutoff(unsigned int objectId, float cutoff);
 void SetObjectRemoveBackground(unsigned int objectId, int enable);
+
+/* Set a small extra margin applied to collision checks so objects don't end up exactly flush.
+ * Pass 0.0f to disable the margin. Default is 0.02f in the implementation.
+ */
+void SetCollisionMargin(float margin);
+
+/* Trigger (non-blocking area) API:
+ * - `SetObjectTriggerEnabled` configures an object's trigger area (does not block movement).
+ * - `CheckObjectTrigger` returns non-zero when `objectId` overlaps the trigger defined by `triggerId`.
+ */
+void SetObjectTriggerEnabled(unsigned int objectId, int enable, float triggerW, float triggerH, float triggerOx, float triggerOy);
+int CheckObjectTrigger(unsigned int triggerId, unsigned int objectId);
 
 void DrawAll(void);
 

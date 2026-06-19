@@ -69,9 +69,10 @@ int main(void)
     }
 
 
-    SetObjectCollisionEnabled(obj2, 1);
-    SetObjectCollisionEnabled(obj1, 1);
-    SetObjectCollisionEnabled(floorObj, 1);
+    SetObjectTriggerEnabled(obj2, 1, 0.5f, 0.5f, 0.0f, 0.0f);
+    SetObjectCollisionEnabled(obj2, 0, 0.36f, 0.59f, 0.0f, 0.0f);
+    SetObjectCollisionEnabled(obj1, 1, 0.36f, 0.59f, 0.0f, 0.0f);
+    SetObjectCollisionEnabled(floorObj, 1, 2.0f, 0.2f, 0.0f, -0.9f);
 
     SetObjectPosition(obj1, 0.0f, 0.0f);
     SetObjectPosition(obj2, 0.8f, 0.0f);
@@ -80,6 +81,7 @@ int main(void)
     SetObjectRemoveBackground(obj2, 1);
 
     int wasHit = 0;
+    int inTrigger = 0;
 
     loop(win)
     {
@@ -87,7 +89,6 @@ int main(void)
         float dy = 0.0f;
         float dx2 = 0.0f;
         float dy2 = 0.0f;
-
         if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
             dx -= 0.01f;
 
@@ -100,11 +101,27 @@ int main(void)
         if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
             dy -= 0.01f;
 
+        if (glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_PRESS)
+            dx2 -= 0.01f;
+        if (glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_PRESS)
+            dx2 += 0.01f;
+        if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS)
+            dy2 += 0.01f;
+        if (glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS)
+            dy2 -= 0.01f;
+
         update_body(obj1, -0.5f);
-        update_body(obj2, -0.5f);
-        
+        update_body(obj2, -0.0f);
+
         int res1 = MoveObject(obj1, dx, dy);
         int res2 = MoveObject(obj2, dx2, dy2);
+
+        int triggerNow = CheckObjectTrigger(obj2, obj1);
+
+        if (triggerNow && !inTrigger) {
+            printf("Entered trigger\n");
+        }
+        inTrigger = triggerNow;
 
         if (res1 == 2 || res2 == 2 || CheckObjectCollision(obj1, obj2)) {
             if (!wasHit) {
@@ -121,6 +138,7 @@ int main(void)
         UI_NewFrame();
         if (UI_BeginWindow("Debug")) {
             UI_Text("Was hit: %d", wasHit);
+            UI_Text("In trigger: %d", inTrigger);
             if (UI_Button("Reset object 1")) {
                 SetObjectPosition(obj1, 0.0f, 0.0f);
             }
