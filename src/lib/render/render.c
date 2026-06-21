@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "render.h"
+#include "camera/camera.h"
 
 
 
@@ -254,12 +255,21 @@ void DrawAll(void) {
             glBindTexture(GL_TEXTURE_2D,o->texture);
         }
 
-        glUniform2f(glGetUniformLocation(shader,"offset"),o->x,o->y);
+        glUniform2f(glGetUniformLocation(shader,"offset"),o->x - CameraX(),o->y - CameraY());
         glUniform1f(glGetUniformLocation(shader,"alphaCutoff"), o->alphaCutoff);
 
         glBindVertexArray(o->vao);
         glDrawElements(GL_TRIANGLES,o->indexCount,GL_UNSIGNED_INT,0);
     }
+}
+
+void GetObjectPosition(unsigned int id, float *x, float *y)
+{
+    if (id >= objectsCount)
+        return;
+
+    if (x) *x = objects[id].x;
+    if (y) *y = objects[id].y;
 }
 
 int CheckObjectCollision(unsigned int a, unsigned int b) {

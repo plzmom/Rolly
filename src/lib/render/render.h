@@ -57,19 +57,14 @@ void SetObjectCollisionEnabled(unsigned int objectId, int enable, float collider
 void SetObjectAlphaCutoff(unsigned int objectId, float cutoff);
 void SetObjectRemoveBackground(unsigned int objectId, int enable);
 
-/* Set a small extra margin applied to collision checks so objects don't end up exactly flush.
- * Pass 0.0f to disable the margin. Default is 0.02f in the implementation.
- */
 void SetCollisionMargin(float margin);
 
-/* Trigger (non-blocking area) API:
- * - `SetObjectTriggerEnabled` configures an object's trigger area (does not block movement).
- * - `CheckObjectTrigger` returns non-zero when `objectId` overlaps the trigger defined by `triggerId`.
- */
 void SetObjectTriggerEnabled(unsigned int objectId, int enable, float triggerW, float triggerH, float triggerOx, float triggerOy);
 int CheckObjectTrigger(unsigned int triggerId, unsigned int objectId);
 
 void DrawAll(void);
+
+void GetObjectPosition(unsigned int id, float *x, float *y);
 
 void DeleteTrash(void);
 

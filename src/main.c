@@ -3,6 +3,7 @@
 #include "lib/UI/ui.h"
 #include "lib/win/window.h"
 #include "lib/render/render.h"
+#include "lib/render/camera/camera.h"
 
 
 int main(void)
@@ -108,6 +109,12 @@ int main(void)
         int res2 = MoveObject(obj2, dx2, dy2);
 
         int triggerNow = CheckObjectTrigger(obj2, obj1);
+
+        float px, py;
+        GetObjectPosition(obj1, &px, &py);
+
+        
+        CameraSet(px, py);
 
         if (triggerNow && !inTrigger) {
             DeleteObject(obj2);
