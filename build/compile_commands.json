@@ -1,0 +1,80 @@
+[
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/gcc -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu11 -o CMakeFiles/libapp.dir/src/glad/src/glad.c.o -c /home/admin1/code/lib/src/glad/src/glad.c",
+  "file": "/home/admin1/code/lib/src/glad/src/glad.c",
+  "output": "CMakeFiles/libapp.dir/src/glad/src/glad.c.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/g++ -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu++17 -o CMakeFiles/libapp.dir/src/lib/UI/imgui/backends/imgui_impl_glfw.cpp.o -c /home/admin1/code/lib/src/lib/UI/imgui/backends/imgui_impl_glfw.cpp",
+  "file": "/home/admin1/code/lib/src/lib/UI/imgui/backends/imgui_impl_glfw.cpp",
+  "output": "CMakeFiles/libapp.dir/src/lib/UI/imgui/backends/imgui_impl_glfw.cpp.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/g++ -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu++17 -o CMakeFiles/libapp.dir/src/lib/UI/imgui/backends/imgui_impl_opengl3.cpp.o -c /home/admin1/code/lib/src/lib/UI/imgui/backends/imgui_impl_opengl3.cpp",
+  "file": "/home/admin1/code/lib/src/lib/UI/imgui/backends/imgui_impl_opengl3.cpp",
+  "output": "CMakeFiles/libapp.dir/src/lib/UI/imgui/backends/imgui_impl_opengl3.cpp.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/g++ -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu++17 -o CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui.cpp.o -c /home/admin1/code/lib/src/lib/UI/imgui/imgui.cpp",
+  "file": "/home/admin1/code/lib/src/lib/UI/imgui/imgui.cpp",
+  "output": "CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui.cpp.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/g++ -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu++17 -o CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui_draw.cpp.o -c /home/admin1/code/lib/src/lib/UI/imgui/imgui_draw.cpp",
+  "file": "/home/admin1/code/lib/src/lib/UI/imgui/imgui_draw.cpp",
+  "output": "CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui_draw.cpp.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/g++ -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu++17 -o CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui_tables.cpp.o -c /home/admin1/code/lib/src/lib/UI/imgui/imgui_tables.cpp",
+  "file": "/home/admin1/code/lib/src/lib/UI/imgui/imgui_tables.cpp",
+  "output": "CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui_tables.cpp.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/g++ -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu++17 -o CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui_widgets.cpp.o -c /home/admin1/code/lib/src/lib/UI/imgui/imgui_widgets.cpp",
+  "file": "/home/admin1/code/lib/src/lib/UI/imgui/imgui_widgets.cpp",
+  "output": "CMakeFiles/libapp.dir/src/lib/UI/imgui/imgui_widgets.cpp.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/g++ -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu++17 -o CMakeFiles/libapp.dir/src/lib/UI/ui.cpp.o -c /home/admin1/code/lib/src/lib/UI/ui.cpp",
+  "file": "/home/admin1/code/lib/src/lib/UI/ui.cpp",
+  "output": "CMakeFiles/libapp.dir/src/lib/UI/ui.cpp.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/gcc -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu11 -o CMakeFiles/libapp.dir/src/lib/audio/audio.c.o -c /home/admin1/code/lib/src/lib/audio/audio.c",
+  "file": "/home/admin1/code/lib/src/lib/audio/audio.c",
+  "output": "CMakeFiles/libapp.dir/src/lib/audio/audio.c.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/gcc -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu11 -o CMakeFiles/libapp.dir/src/lib/render/camera/camera.c.o -c /home/admin1/code/lib/src/lib/render/camera/camera.c",
+  "file": "/home/admin1/code/lib/src/lib/render/camera/camera.c",
+  "output": "CMakeFiles/libapp.dir/src/lib/render/camera/camera.c.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/gcc -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu11 -o CMakeFiles/libapp.dir/src/lib/render/render.c.o -c /home/admin1/code/lib/src/lib/render/render.c",
+  "file": "/home/admin1/code/lib/src/lib/render/render.c",
+  "output": "CMakeFiles/libapp.dir/src/lib/render/render.c.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/gcc -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu11 -o CMakeFiles/libapp.dir/src/lib/win/window.c.o -c /home/admin1/code/lib/src/lib/win/window.c",
+  "file": "/home/admin1/code/lib/src/lib/win/window.c",
+  "output": "CMakeFiles/libapp.dir/src/lib/win/window.c.o"
+},
+{
+  "directory": "/home/admin1/code/lib/build",
+  "command": "/usr/bin/gcc -I/home/admin1/code/lib/src -I/home/admin1/code/lib/src/glad/include -I/home/admin1/code/lib/src/lib/UI/imgui -g -std=gnu11 -o CMakeFiles/app.dir/src/main.c.o -c /home/admin1/code/lib/src/main.c",
+  "file": "/home/admin1/code/lib/src/main.c",
+  "output": "CMakeFiles/app.dir/src/main.c.o"
+}
+]

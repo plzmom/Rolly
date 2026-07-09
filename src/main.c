@@ -5,7 +5,6 @@
 #include "lib/render/render.h"
 #include "lib/render/camera/camera.h"
 
-
 int main(void)
 {
     Window *win = create_window(1920, 1080, "Title");

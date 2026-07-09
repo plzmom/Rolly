@@ -1,0 +1,4 @@
+/home/admin1/code/lib/build/CMakeFiles/libapp.dir
+/home/admin1/code/lib/build/CMakeFiles/app.dir
+/home/admin1/code/lib/build/CMakeFiles/edit_cache.dir
+/home/admin1/code/lib/build/CMakeFiles/rebuild_cache.dir
